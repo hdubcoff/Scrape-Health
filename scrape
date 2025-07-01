@@ -1,10 +1,22 @@
-from flask import Flask
+# scrape/scrape.py
+import requests
+from bs4 import BeautifulSoup
 
-app = Flask(__name__)
+def get_functional_recipes():
+    url = "https://drhyman.com/blog/category/recipes/"
+    response = requests.get(url)
+    
+    if response.status_code != 200:
+        return []
 
-@app.route("/")
-def home():
-    return "Hello! Your Flask app is working!"
+    soup = BeautifulSoup(response.text, "html.parser")
+    recipe_elements = soup.select(".title a")  # Update selector if needed
 
-if __name__ == "__main__":
-    app.run()
+    recipes = []
+    for element in recipe_elements[:10]:  # Limit to 10 for now
+        recipes.append({
+            "title": element.get_text(strip=True),
+            "link": element["href"]
+        })
+
+    return recipes
