@@ -6,5 +6,8 @@ app = Flask(__name__)
 def home():
     return "Hello from Scrape-Health!"
 
-if __name__ == "__main__":
+if __name__ != "__main__":
+    # For Gunicorn (used by Render)
+    application = app
+else:
     app.run()
