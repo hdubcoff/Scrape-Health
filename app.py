@@ -38,3 +38,16 @@ def get_recipes():
 # Run app locally (Render uses gunicorn, so this won’t run in production)
 if __name__ == "__main__":
     app.run(debug=True)
+from flask import Flask, jsonify
+from scrape.scrape import get_functional_recipes  # <- make sure this matches
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return 'Welcome to Scrape-Health! Visit /recipes to see functional recipes.'
+
+@app.route('/recipes')
+def recipes():
+    data = get_functional_recipes()
+    return jsonify(data)
